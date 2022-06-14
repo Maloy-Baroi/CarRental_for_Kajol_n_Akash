@@ -1,0 +1,203 @@
+{% extends 'App_admin/basement.html' %}
+{% block admin_base_main %}
+    <style>
+        .container_content {
+            margin: 10px 50px;
+        }
+
+        @media screen and (max-width: 720px) {
+            .container_content {
+                margin: 10px 20px;
+            }
+        }
+
+        .form-div {
+            padding: 10px;
+            background: var(--body-bg);
+            border-top: none;
+            border-bottom: none;
+            line-height: 24px;
+            color: var(--body-quiet-color);
+            width: 100%;
+        }
+
+        .form-div form select {
+            vertical-align: top;
+            height: 24px;
+            color: var(--body-fg);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 14px;
+            padding: 0 0 0 4px;
+            margin: 0 0 0 10px;
+        }
+
+        /* Table Css */
+        table {
+            border: 1px solid #ccc;
+            border-collapse: collapse;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            table-layout: fixed;
+        }
+
+        table tr {
+            background-color: #f8f8f8;
+            border: 1px solid #ddd;
+            padding: .35em;
+        }
+
+        table th,
+        table td {
+            padding: .625em;
+            text-align: left;
+        }
+
+        table th {
+            font-size: .85em;
+            letter-spacing: .1em;
+            text-transform: uppercase;
+            text-align: left;
+        }
+
+        @media screen and (max-width: 600px) {
+            table {
+                border: 0;
+            }
+
+            table caption {
+                font-size: 1.3em;
+            }
+
+            table thead {
+                border: none;
+                clip: rect(0 0 0 0);
+                height: 1px;
+                margin: -1px;
+                overflow: hidden;
+                padding: 0;
+                position: absolute;
+                width: 1px;
+            }
+
+            table tr {
+                border-bottom: 3px solid #ddd;
+                display: block;
+                margin-bottom: .625em;
+            }
+
+            table td {
+                border-bottom: 1px solid #ddd;
+                display: block;
+                font-size: .8em;
+                text-align: right;
+            }
+
+            table td::before {
+                /*
+                * aria-label has no advantage, it won't be read inside a table
+                content: attr(aria-label);
+                */
+                content: attr(data-label);
+                float: left;
+                font-weight: bold;
+                text-transform: uppercase;
+            }
+
+            table td:last-child {
+                border-bottom: 0;
+            }
+        }
+    </style>
+    <div class="main__inner container_content">
+        <div class="content">
+            <p>
+                <span style="font-size: 20px">
+                    Select custom user to change
+                </span>
+                <span>
+                    <button class="btn-shadow btn btn-info" style="float: right" onclick="addAreaFormOpener()">
+                        ADD NEW AREA
+                    </button>
+                </span>
+            </p>
+        </div>
+        <div class="form-div">
+        </div>
+        <table id="id-user-table">
+            <thead>
+            <tr>
+                <th scope="col" style="color: #666666;">City</th>
+                <th scope="col" style="color: #666666;">Zipcode</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for a in areas %}
+                <tr>
+                    <td data-label="City">{{ a.city }}</td>
+                    <td data-label="Zipcode">{{ a.pincode }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="container">
+        <div class="add-user-form" style="display: none;" id="id-addArea-form">
+            <div class="row">
+                <div class="col-md-3"></div>
+                <div class="col-md-6" style="border: 1px solid #000000; border-radius: 7px;">
+                    <form method="post" class="form-group">
+                        {% csrf_token %}
+                        <legend style="text-align: center; font-size: 20px;">Add New Area</legend>
+                        <fieldset class="form-group">
+                            <div class="form-group">
+                                <label for="id_City">City</label>
+                                <input type="text" name="City" id="id_City" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="id_ZipCode">ZipCode</label>
+                                <input type="number" name="ZipCode" id="id_ZipCode" class="form-control" required>
+                            </div>
+                        </fieldset>
+                        <div class="form-group">
+                            <button class="btn btn-success" type="submit">
+                                Add
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-md-3"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let closer = 0;
+        let addAreaForm = document.getElementById('id-addArea-form');
+
+        function addAreaFormOpener() {
+            if (closer === 0) {
+                addAreaForm.style.display = 'block';
+                closer = 1;
+            } else {
+                addAreaForm.style.display = 'none';
+                closer = 0;
+            }
+        }
+    </script>
+{% endblock %}
+
+{% block active_script %}
+    dashboard.classList.remove('mm-active')
+    Users.classList.remove('mm-active')
+    UserProfiles.classList.remove('mm-active')
+    ContactUs.classList.remove('mm-active')
+    Areas.classList.add('mm-active')
+    BookingMoney.classList.remove('mm-active')
+    CarBookings.classList.remove('mm-active')
+    CarBrands.classList.remove('mm-active')
+    CarDrivers.classList.remove('mm-active')
+    Vehicles.classList.remove('mm-active')
+    groups.classList.remove('mm-active')
+{% endblock %}

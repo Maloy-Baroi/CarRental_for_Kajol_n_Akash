@@ -1,0 +1,515 @@
+{% extends 'App_main/base.html' %}
+{% load static %}
+{% block main %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <style>
+        .car-details .img {
+            width: 100%;
+            height: auto;
+            margin-bottom: 40px;
+        }
+
+        .car-details span.subheading {
+            font-size: 12px;
+            text-transform: uppercase;
+            font-weight: 600;
+            letter-spacing: 2px;
+            color: rgba(0, 0, 0, 0.4);
+            display: block;
+        }
+
+        .pills {
+            margin-top: 40px;
+        }
+
+        .nav-pills {
+            font-size: 18px;
+            font-weight: 400;
+            display: inline-block;
+        }
+
+        .nav-pills {
+            border-radius: 0.25rem;
+        }
+
+        .nav-pills li a {
+            margin-right: 2px;
+            color: rgba(0, 0, 0, 0.4) !important;
+            text-decoration: none;
+        }
+
+
+        .services .icon {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            margin: 0 auto;
+            margin-bottom: 20px;
+        }
+
+        .services h3 {
+            font-size: 17px;
+            font-weight: 500;
+            color: rgba(0, 0, 0, 0.4) !important;
+        }
+
+        .services h3 span {
+            color: #931818 !important;
+        }
+
+        .carDescription {
+            padding: 2em;
+            border-top: 1px solid rgba(0, 0, 0, 0.1) !important;
+            color: rgba(0, 0, 0, 0.66);
+        }
+
+        .carImage {
+            width: 100% !important;
+            height: auto;
+        }
+
+        /*---- Table CSS ----*/
+        table {
+            border: 1px solid #ccc;
+            border-collapse: collapse;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            table-layout: fixed;
+        }
+
+        table caption {
+            font-size: 1.5em;
+            margin: .5em 0 .75em;
+        }
+
+        table tr {
+            background-color: #f8f8f8;
+            border: 1px solid #ddd;
+            padding: .35em;
+        }
+
+        table th,
+        table td {
+            padding: .625em;
+            text-align: center;
+        }
+
+        table th {
+            font-size: .85em;
+            letter-spacing: .1em;
+            text-transform: uppercase;
+        }
+
+        @media screen and (max-width: 600px) {
+            table {
+                border: 0;
+            }
+
+            table caption {
+                font-size: 1.3em;
+            }
+
+            table thead {
+                border: none;
+                clip: rect(0 0 0 0);
+                height: 1px;
+                margin: -1px;
+                overflow: hidden;
+                padding: 0;
+                position: absolute;
+                width: 1px;
+            }
+
+            table tr {
+                border-bottom: 3px solid #ddd;
+                display: block;
+                margin-bottom: .625em;
+            }
+
+            table td {
+                border-bottom: 1px solid #ddd;
+                display: block;
+                font-size: .8em;
+                text-align: right;
+            }
+
+            table td::before {
+                /*
+                * aria-label has no advantage, it won't be read inside a table
+                content: attr(aria-label);
+                */
+                content: attr(data-label);
+                float: left;
+                font-weight: bold;
+                text-transform: uppercase;
+            }
+
+            table td:last-child {
+                border-bottom: 0;
+            }
+        }
+    </style>
+
+    <div class="container mt-3 p-3">
+        <div class="row justify-content-center">
+            <div class="col-md-12">
+                <div class="car-details">
+                    <div class="img rounded">
+                        <img src="{{ car.car_image.url }}" alt="Car Image" class="carImage">
+                    </div>
+                    <div class="text text-center">
+                        <span class="subheading">{{ car.car_number }}</span>
+                        <h2>{{ car.car_name }}</h2>
+                        <h5>
+                            <span id="id-car-city">{{ car.area.city }}</span>
+                            -
+                            <span id="id-car-zone">{{ car.area.pincode }}</span></h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md d-flex align-self-stretch ftco-animate fadeInUp ftco-animated">
+                <div class="media block-6 services">
+                    <div class="media-body py-md-4">
+                        <div class="d-flex mb-3 align-items-center">
+                            <div class="icon d-flex align-items-center justify-content-center">
+                                <img src="{% static 'images/dashboard.png' %}" alt="piston"
+                                     style="width: 40px; height: 40px;">
+                            </div>
+                            <div class="text">
+                                <h3 class="heading mb-0 pl-3">
+                                    Cost <br>
+                                    <span>{{ car.cost_per_day }} / Day</span>
+                                </h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md d-flex align-self-stretch ftco-animate fadeInUp ftco-animated">
+                <div class="media block-6 services">
+                    <div class="media-body py-md-4">
+                        <div class="d-flex mb-3 align-items-center">
+                            <div class="icon d-flex align-items-center justify-content-center">
+                                <img src="{% static 'images/piston.png' %}" alt="piston"
+                                     style="width: 40px; height: 40px;">
+                            </div>
+                            <div class="text">
+                                <h3 class="heading mb-0 pl-3">
+                                    Transmission <br>
+                                    <span>Manual</span>
+                                </h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md d-flex align-self-stretch ftco-animate fadeInUp ftco-animated">
+                <div class="media block-6 services">
+                    <div class="media-body py-md-4">
+                        <div class="d-flex mb-3 align-items-center">
+                            <div class="icon d-flex align-items-center justify-content-center">
+                                <img src="{% static 'images/car-seat.png' %}" alt="piston"
+                                     style="width: 40px; height: 40px;">
+                            </div>
+                            <div class="text">
+                                <h3 class="heading mb-0 pl-3">
+                                    Seats <br>
+                                    <span>{{ car.capacity }} Adults</span>
+                                </h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md d-flex align-self-stretch ftco-animate fadeInUp ftco-animated">
+                <div class="media block-6 services">
+                    <div class="media-body py-md-4">
+                        <div class="d-flex mb-3 align-items-center">
+                            <div class="icon d-flex align-items-center justify-content-center">
+                                <img src="{% static 'images/car-door.png' %}" alt="piston"
+                                     style="width: 40px; height: 40px;">
+                            </div>
+                            <div class="text">
+                                <h3 class="heading mb-0 pl-3">
+                                    Entering <br>
+                                    <span>{{ car.doors }} Doors</span>
+                                </h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md d-flex align-self-stretch ftco-animate fadeInUp ftco-animated">
+                <div class="media block-6 services">
+                    <div class="media-body py-md-4">
+                        <div class="d-flex mb-3 align-items-center">
+                            <div class="icon d-flex align-items-center justify-content-center">
+                                <img src="{% static 'images/oil-gauge.png' %}" alt="piston"
+                                     style="width: 40px; height: 40px;">
+                            </div>
+                            <div class="text">
+                                <h3 class="heading mb-0 pl-3">
+                                    Fuel <br>
+                                    <span>Petrol</span>
+                                </h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 pills">
+                <div class="bd-example bd-example-tabs">
+                    <div class="d-flex justify-content-center">
+                        <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                            <li class="nav-item">
+                                <a id="pills-manufacturer-tab" data-toggle="pill" style="cursor: none"
+                                   href="#" role="tab" aria-controls="pills-manufacturer"
+                                   aria-expanded="true">Description</a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="tab-content" id="pills-tabContent">
+                        <div class="tab-pane fade show active" id="pills-description" role="tabpanel"
+                             aria-labelledby="pills-description-tab">
+                            <div class="row">
+                                <p class="carDescription">{{ car.description }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row" id="id-bookingFormOpener">
+            <div class="col-md-2">
+
+            </div>
+            <div class="col-md-8">
+                <button class="btn btn-lg" style="background: #1089ff !important;
+                                            border: 1px solid #1089ff !important;
+                                            color: #fff !important; width: 100%" onclick="openBookingForm()">
+                    Book Now
+                </button>
+            </div>
+            <div class="col-md-2">
+
+            </div>
+        </div>
+        <div class="row" style="display: none;" id="id-booking-form">
+            <div class="col-md-2">
+                <p></p>
+            </div>
+            <div class="col-md-8">
+                <form method="post" action="{% url 'App_main:confirm-booking' %}">
+                    {% csrf_token %}
+                    <input type="number" style="display: none;" name="carID" value="{{ car.id }}" id="id-carID">
+                    <div class="form-control-wrap pt-2 pb-2">
+                        <label for="id-pickupLocation">Pickup Location</label>
+                        <input type="text" id="id-pickupLocation" placeholder="Pickup Location"
+                               class="form-control px-3" name="pickupLocation"
+                               style="height: 50px;" required>
+                    </div>
+                    <div class="form-control-wrap pt-2 pb-2">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label for="id-pickupCity">Pickup City</label>
+                                <input type="text" id="id-city" placeholder="City"
+                                       class="form-control px-3" name="pickupCity"
+                                       style="height: 50px;" required>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="id-pickupZipcode">Zip Code</label>
+                                <input type="text" id="id-pickupZipcode" placeholder="ZipCode"
+                                       class="form-control px-3" name="pickupZipcode"
+                                       style="height: 50px;" required>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="id-Phone">Mobile Number</label>
+                                <input type="text" id="id-Phone" placeholder="Mobile Number with +880"
+                                       class="form-control px-3" name="Phone"
+                                       style="height: 50px;" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-control-wrap pt-2 pb-2">
+                        <label for="id-pickupDate">Pickup Date</label>
+                        <input type="date" id="id-pickupDate" placeholder="Pickup Date"
+                               class="form-control datepicker px-3" name="pickupDate"
+                               style="height: 50px;" required>
+                    </div>
+                    <div class="form-control-wrap pt-2 pb-2">
+                        <label for="id-driver-need">Do you need a driver?</label>
+                        <select name="driver-need" id="id-driver-need" class="custom-select form-control" required>
+                            <option value="1">Yes</option>
+                            <option value="0">No</option>
+                        </select>
+                    </div>
+                    <div class="form-control-wrap pt-2 pb-2">
+                        <label for="id-returnDate">Return Date</label>
+                        <input type="date" id="id-returnDate" placeholder="Return Date"
+                               class="form-control datepicker px-3" name="returnDate"
+                               style="height: 50px;" required>
+                    </div>
+                    <div class="form-control-wrap pt-2 pb-2">
+                        <label for="id-purpose">Purpose of renting car</label>
+                        <textarea class="form-control" name="rentPurpose" id="id-purpose" required></textarea>
+                    </div>
+                    {% if profile_done %}
+                        <button class="btn btn-lg" style="background: #1089ff !important;
+                                            border: 1px solid #1089ff !important;
+                                            color: #fff !important; width: 100%" type="button"
+                                data-bs-toggle="modal" onclick="confirmationFunction()"
+                                data-bs-target="#bookingConfirmationModal">
+                            Book now
+                        </button>
+                    {% else %}
+                        <button class="btn btn-lg" style="background: #ff106c !important;
+                                            border: 1px solid #ff106c !important;
+                                            color: #fff !important; width: 100%;" type="button"
+                                title="Complete Your Profile">
+                            Book now
+                        </button>
+                        <h5 style="font-size: 13px; text-align: center; padding: 15px; color: rgb(0,0,0)">
+                            Complete your
+                            <a href="{% url 'App_main:profile' %}" style="text-decoration: none; color: #ff106c">
+                                profile
+                            </a>
+                        </h5>
+                    {% endif %}
+                    <!-- Modal -->
+                    <div class="modal fade" id="bookingConfirmationModal" tabindex="-1"
+                         aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-body">
+                                    <table>
+                                        <caption>Statement Summary</caption>
+                                        <thead>
+                                        <tr>
+                                            <th scope="col">Car Name</th>
+                                            <th scope="col">Car Number</th>
+                                            <th scope="col">Doors</th>
+                                            <th scope="col">Capacity</th>
+                                            <th scope="col">Pickup Date</th>
+                                            <th scope="col">Return Date</th>
+                                            <th scope="col">Period</th>
+                                            <th scope="col">Total Cost</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <td data-label="Car Name" id="id-carName"></td>
+                                            <td data-label="Car Number" id="id-carNumber"></td>
+                                            <td data-label="Doors" id="id-doors"></td>
+                                            <td data-label="Capacity" id="id-capacity"></td>
+                                            <td data-label="Pickup Date" id="id-pDate"></td>
+                                            <td data-label="Return Date" id="id-rDate"></td>
+                                            <td data-label="Period" id="id-Period"></td>
+                                            <td data-label="Total Cost" id="id-totalCost"></td>
+                                        </tr>
+                                        <tr>
+                                            <p class="alert-success text-center p-3" id="id-booking-money-info">
+                                                You Have to pay 5% amount to confirm the booking.
+                                            </p>
+                                            <p class="alert-danger text-center p-3" id="id-location-no-match">
+                                                Your pickup location doesn't match with serving area.
+                                            </p>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close
+                                    </button>
+                                    <button type="submit" class="btn btn-primary" id="id-pay-n-confirm">Pay & confirm</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="col-md-2">
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let bookingForm = document.getElementById('id-booking-form');
+        let bookingFormOpener = document.getElementById('id-bookingFormOpener');
+        let carName = document.getElementById('id-carName');
+        let carNumber = document.getElementById('id-carNumber');
+        let carCity = document.getElementById('id-car-city').innerText;
+        let carZone = document.getElementById('id-car-zone').innerText;
+        let doors = document.getElementById('id-doors');
+        let capacity = document.getElementById('id-capacity');
+        let pDate = document.getElementById('id-pDate');
+        let rDate = document.getElementById('id-rDate');
+        let Period = document.getElementById('id-Period');
+        let totalCost = document.getElementById('id-totalCost');
+        let payButton = document.getElementById('id-pay-n-confirm');
+        let bookingMoneyInfo = document.getElementById('id-booking-money-info');
+        let locationNoMatch = document.getElementById('id-location-no-match');
+
+        function openBookingForm() {
+            bookingForm.style.display = 'block';
+            bookingFormOpener.style.display = 'none';
+        }
+
+        function confirmationFunction() {
+            let carID = document.getElementById('id-carID').value;
+            let pickupLocation = document.getElementById('id-pickupLocation').value;
+            let pickupCity = document.getElementById('id-city').value;
+            let pickupZipcode = document.getElementById('id-pickupZipcode').value;
+            let pickupDate = document.getElementById('id-pickupDate').value;
+            let driverNeed = document.getElementById('id-driver-need').value;
+            let returnDate = document.getElementById('id-returnDate').value;
+            let purpose = document.getElementById('id-purpose').value;
+            let carData = JSON.parse("{{ carDictionary|escapejs }}");
+            const date1 = new Date(pickupDate);
+            const date2 = new Date(returnDate);
+            const diffTime = Math.abs(date2 - date1) / (1000 * 3600 * 24) + 1;
+            carName.innerText = carData[carID][1];
+            carNumber.innerText = carData[carID][3];
+            doors.innerText = carData[carID][6];
+            capacity.innerText = carData[carID][5];
+            pDate.innerText = pickupDate;
+            rDate.innerText = returnDate;
+            Period.innerText = diffTime;
+            if ((pickupCity.toLowerCase() !== carCity.toLowerCase()) && (pickupZipcode !== carZone)) {
+                payButton.classList.add('disabled');
+                locationNoMatch.style.display = 'block';
+                bookingMoneyInfo.style.display = 'none';
+            }
+            else {
+                payButton.classList.remove('disabled');
+                locationNoMatch.style.display = 'none';
+                bookingMoneyInfo.style.display = 'block';
+            }
+            if (driverNeed === '1') {
+                totalCost.innerText = diffTime * carData[carID][7] + diffTime * 800;
+            } else {
+                totalCost.innerText = diffTime * carData[carID][7];
+            }
+
+            if (pDate.innerText === "") {
+                carName.innerText = "No Data";
+                carNumber.innerText = "No Data";
+                doors.innerText = "No Data";
+                capacity.innerText = "No Data";
+                pDate.innerText = "No Data";
+                rDate.innerText = "No Data";
+                Period.innerText = "No Data";
+                totalCost.innerText = "No Data";
+            }
+        }
+    </script>
+{% endblock %}
+
+

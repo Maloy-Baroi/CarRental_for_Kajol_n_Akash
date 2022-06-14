@@ -1,0 +1,540 @@
+{% extends 'App_main/base.html' %}
+{% load static %}
+{% load crispy_forms_filters %}
+{% block main %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        .hero {
+            position: relative;
+            background-size: cover;
+        }
+
+        .hero, .hero > .container > .row {
+            height: 100vh;
+            min-height: 570px;
+        }
+
+        .hero .intro {
+            position: relative;
+            z-index: 4;
+        }
+
+        .hero .intro h1 {
+            color: #000;
+            font-size: 50px;
+        }
+
+        .hero .intro strong {
+            font-weight: 900;
+        }
+
+        .hero.inner-page, .hero.inner-page > .container > .row {
+            height: 40vh !important;
+            min-height: 200px;
+        }
+
+        .custom-breadcrumbs {
+            padding-bottom: 40px;
+        }
+
+        .custom-breadcrumbs a {
+            color: #000;
+        }
+
+        .custom-breadcrumbs strong {
+            font-weight: 700;
+        }
+
+        .custom-pagination a, .custom-pagination span {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            line-height: 40px;
+            text-align: center;
+            border-radius: 50%;
+        }
+
+        .custom-pagination span {
+            background: #efefef;
+        }
+
+        .custom-pagination a {
+            background: #0779e4;
+            color: #fff;
+        }
+
+        .form-control {
+            border: 1px solid #e6e6e6;
+            height: 55px;
+            width: 187px;
+        }
+
+        .form-control:hover, .form-control:active, .form-control:focus {
+            border: 1px solid #666666;
+        }
+
+        .trip-form {
+            border-radius: 7px;
+            padding: 40px;
+            background: #fff;
+            position: relative;
+            z-index: 3;
+            -webkit-box-shadow: 0 15px 30px 0px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 15px 30px 0px rgba(0, 0, 0, 0.1);
+        }
+
+        .trip-form .form-control {
+            border-color: rgba(0, 0, 0, 0.2);
+            padding-left: 20px;
+            padding-right: 20px;
+        }
+
+        .trip-form .form-control:active, .trip-form .form-control:focus {
+            border-color: #000;
+        }
+
+        .trip-form .form-control-wrap {
+            position: relative;
+        }
+
+        .trip-form .icon {
+            position: absolute;
+            right: 10px;
+            color: #ccc;
+            top: 50%;
+            -webkit-transform: translateY(-50%);
+            -ms-transform: translateY(-50%);
+            transform: translateY(-50%);
+            font-size: 20px;
+        }
+
+        .site-section {
+            padding: 70px 0;
+        }
+
+        @media (max-width: 991.98px) {
+            .site-section {
+                padding: 30px 0;
+            }
+        }
+
+        .section-heading strong {
+            font-weight: 700;
+            color: #364D59;
+            font-size: 32px;
+            font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+        }
+
+        .site-section .mb-5 {
+            font-weight: 200;
+            font-size: 16px;
+            font-family: 'DM Sans', sans-serif;
+        }
+
+        .step {
+            position: relative;
+        }
+
+        .step .number {
+            font-weight: 900;
+        }
+
+        .step > span {
+            font-size: 100px;
+            color: rgba(7, 121, 228, 0.29);
+            font-weight: 900;
+            top: 0;
+            left: -30px;
+            position: absolute;
+        }
+
+        .step .step-inner {
+            position: relative;
+            padding: 40px;
+            -webkit-box-shadow: 0 15px 30px 0 rgba(0, 0, 0, 0.1);
+            box-shadow: 0 15px 30px 0 rgba(0, 0, 0, 0.1);
+            background: #fff;
+            font-size: 14px;
+        }
+
+        .step .step-inner h3 {
+            font-size: 20px;
+            color: #000;
+            font-weight: 700;
+        }
+
+        .step .step-inner *:last-child {
+            margin-bottom: 0;
+        }
+
+        .step .step-inner p {
+            color: #999;
+        }
+
+        .listing {
+            padding: 20px;
+            margin-bottom: 30px;
+            background: #fff;
+            border-radius: 7px;
+        }
+
+        .listing .listing-img {
+            width: 100%;
+            margin-left: 0px;
+            margin-top: -40px;
+            margin-bottom: 30px;
+        }
+
+        .listing .listing-img img {
+            border-radius: 7px;
+            -webkit-box-shadow: 0 15px 30px 0 rgba(0, 0, 0, 0.1);
+            box-shadow: 0 15px 30px 0 rgba(0, 0, 0, 0.1);
+        }
+
+        .listing .listing-contents h3 {
+            font-size: 18px;
+            font-weight: 900;
+            color: #364d59;
+        }
+
+        .listing .listing-contents .rent-price strong {
+            color: #0779e4;
+            font-size: 18px;
+        }
+
+        .listing .listing-contents .listing-feature .number {
+            color: #888;
+        }
+
+        .listing .listing-contents .caption {
+            color: #000;
+            margin-right: 10px;
+        }
+
+        .listing p {
+            color: #888;
+            font-size: 14px;
+        }
+
+        .btn.btn-primary {
+            padding: 12px 25px;
+        }
+
+        .bg-light {
+            background-color: #f6f5f5 !important;
+        }
+
+        .testimonial-2 {
+            border-radius: 7px;
+            background: #fff;
+            padding: 30px;
+            border-bottom: 4px solid #0779e4;
+            -webkit-box-shadow: 0 15px 30px 0 rgba(0, 0, 0, 0.1);
+            box-shadow: 0 15px 30px 0 rgba(0, 0, 0, 0.1);
+        }
+
+        .testimonial-2 blockquote {
+            font-size: 18px;
+        }
+
+        .testimonial-2 .v-card img {
+            width: 50px;
+            -webkit-box-flex: 0;
+            -ms-flex: 0 0 50px;
+            flex: 0 0 50px;
+            border-radius: 50%;
+        }
+
+        .testimonial-2 .author-name {
+            line-height: 1.3;
+        }
+
+        .testimonial-2 .author-name > span:nth-of-type(2) {
+            color: #ccc;
+        }
+
+        h2 {
+            font-weight: 300;
+        }
+
+        .opa-7 {
+            color: rgba(255, 255, 255, 0.7) !important;
+        }
+
+        .btn.btn-white {
+            background: #fff;
+            color: #0779e4;
+            padding: 12px 25px;
+            float: right;
+        }
+
+        .btn.btn-primary {
+            padding: 12px 25px;
+        }
+    </style>
+
+    <div class="hero" style="background-image: url('{% static "images/hero_1_a.jpg" %}');">
+        <div class="container">
+            <div class="row align-items-center justify-content-center">
+                <div class="col-lg-10">
+
+                    <div class="row mb-5">
+                        <div class="col-lg-7 intro">
+                            <h1><strong>Rent a car</strong> is within your finger tips.</h1>
+                        </div>
+                    </div>
+
+                    <form class="trip-form">
+                        <div class="row align-items-center">
+                            <div class="mb-3 mb-md-0 col-md-4">
+                                <select name="carBrand" id="carBrand" class="form-control">
+                                    <option value="">Select Car Type</option>
+                                    {% for carType in carTypes %}
+                                        <option value="{{ carType }}">{{ carType }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="mb-3 mb-md-0 col-md-3">
+                                <div class="form-control-wrap">
+                                    <input type="text" id="cf-4" placeholder="City"
+                                           class="form-control px-3">
+                                </div>
+                            </div>
+                            <div class="mb-3 mb-md-0 col-md-3">
+                                <div class="form-control-wrap">
+                                    <input type="text" id="cf-5" placeholder="Zip Code"
+                                           class="form-control px-3">
+                                </div>
+                            </div>
+                            <div class="mb-3 mb-md-0 col-md-2">
+                                <input type="button" value="Search Now" class="btn btn-primary btn-block py-3"
+                                       id="searchButton" onclick="searchedCar()"
+                                       data-bs-toggle="modal" data-bs-target="#searchModal">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container mt-5">
+        <!-- Modal -->
+        <div class="modal fade" id="searchModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body" id="searchResult">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="site-section">
+        <div class="container">
+            <h2 class="section-heading"><strong>How it works?</strong></h2>
+            <p class="mb-5">Easy steps to get you started</p>
+
+            <div class="row mb-5">
+                <div class="col-lg-4 mb-4 mb-lg-0">
+                    <div class="step">
+                        <span>1</span>
+                        <div class="step-inner">
+                            <span class="number text-primary">01.</span>
+                            <h3>Select a car</h3>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vero, laboriosam!</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 mb-4 mb-lg-0">
+                    <div class="step">
+                        <span>2</span>
+                        <div class="step-inner">
+                            <span class="number text-primary">02.</span>
+                            <h3>Fill up form</h3>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vero, laboriosam!</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 mb-4 mb-lg-0">
+                    <div class="step">
+                        <span>3</span>
+                        <div class="step-inner">
+                            <span class="number text-primary">03.</span>
+                            <h3>Payment</h3>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vero, laboriosam!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="site-section bg-light">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-7">
+                    <h2 class="section-heading"><strong>Car Listings</strong></h2>
+                    <p class="mb-5">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+                </div>
+            </div>
+
+
+            <div class="row">
+                {% for car in cars %}
+                    <div class="col-md-6 col-lg-4 mb-4">
+                        <div class="listing d-block  align-items-stretch">
+                            <div class="listing-img h-100 mr-4">
+                                <img src="{{ car.car_image.url }}" alt="Image" class="img-fluid"
+                                     style="width: 100%; height: 252px">
+                            </div>
+                            <div class="listing-contents h-100">
+                                <h3>{{ car.car_name }}</h3>
+                                <div class="rent-price">
+                                    <strong>৳ {{ car.cost_per_day }}</strong><span class="mx-1">/</span>day
+                                </div>
+                                <div class="d-block d-md-flex mb-3 border-bottom pb-3">
+                                    <div class="listing-feature pr-4">
+                                        <span class="caption">Doors:</span><br>
+                                        <span class="number">{{ car.doors }}</span>
+                                    </div>
+                                    <div class="listing-feature pr-4">
+                                        <span class="caption">Passenger:</span><br>
+                                        <span class="number">{{ car.capacity }}</span>
+                                    </div>
+                                </div>
+                                <div>
+                                    <p>{{ car.description|truncatechars:100 }}</p>
+                                    <p>
+                                        <a href="{% url 'App_main:car-book' pk=car.id %}"
+                                           class="btn btn-primary btn-sm">
+                                            Rent Now
+                                        </a>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <div class="site-section bg-light">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-7">
+                    <h2 class="section-heading"><strong>Testimonials</strong></h2>
+                    <p class="mb-5">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6 mb-4 mb-lg-0">
+                    <div class="testimonial-2">
+                        <blockquote class="mb-4">
+                            <p>"Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatem, deserunt eveniet
+                                veniam. Ipsam, nam, voluptatum"</p>
+                        </blockquote>
+                        <div class="d-flex v-card align-items-center">
+                            <img src="images/person_1.jpg" alt="Image" class="img-fluid mr-3">
+                            <div class="author-name">
+                                <span class="d-block">Akash</span>
+                                <span>Owner & Developer</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 mb-4 mb-lg-0">
+                    <div class="testimonial-2">
+                        <blockquote class="mb-4">
+                            <p>"Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatem, deserunt eveniet
+                                veniam. Ipsam, nam, voluptatum"</p>
+                        </blockquote>
+                        <div class="d-flex v-card align-items-center">
+                            <img src="images/person_2.jpg" alt="Image" class="img-fluid mr-3">
+                            <div class="author-name">
+                                <span class="d-block">Kajol</span>
+                                <span>Owner & Developer</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="site-section bg-primary py-5">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-7 mb-4 mb-md-0">
+                    <h2 class="mb-0 text-white">What are you waiting for?</h2>
+                    <p class="mb-0 opa-7">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Obcaecati,
+                        laboriosam.</p>
+                </div>
+                <div class="col-lg-5 text-md-right">
+                    <a href="#" class="btn btn-primary btn-white">Rent a car now</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let data = JSON.parse("{{ data|escapejs }}");
+        let searchResult = document.getElementById('searchResult');
+        let data_key_list = new Set();
+        let searchCounter = 0;
+        let prevCarBrand = "", prevPickupLocation = "";
+
+        function searchedCar() {
+            let searchCarBrand = document.getElementById('carBrand');
+            let pickupCity = document.getElementById('cf-4');
+            let pickupZipcode = document.getElementById('cf-5');
+
+            let pickupLocation = pickupCity.value+"-"+pickupZipcode.value;
+            console.log(pickupLocation);
+            console.log(typeof pickupLocation);
+
+            searchResult.innerHTML = "";
+            for (const dataKey in data) {
+                let carLocation = (data[dataKey][5]).toLowerCase();
+                let customerLocation = pickupLocation.toLowerCase();
+                let position = carLocation.search(customerLocation);
+                data_key_list.add(data[dataKey][0]);
+                if ((data[dataKey][2] === searchCarBrand.value) && (position !== -1) && (data[dataKey][9] === true)) {
+                    searchResult.innerHTML +=
+                        `<div class="card" style="width: 100%;">
+                          <img src="${data[dataKey][11]}" class="card-img-top" alt="Car Image">
+                          <div class="card-body">
+                            <h5 class="card-title">${data[dataKey][1]}</h5>
+                                <ul>
+                                    <li>৳${data[dataKey][8]}/day</li>
+                                    <li>Door: ${data[dataKey][7]}</li>
+                                    <li>Passenger: ${data[dataKey][6]}</li>
+                                </ul>
+                            <p class="card-text">${data[dataKey][10].substring(0, 100)}</p>
+                            <button onclick="gotoDetails(${data[dataKey][0]})" class="btn btn-primary" id="${data[dataKey][0]}">
+                                Book this car
+                            </button>
+                          </div>
+                        </div>`;
+                }
+            }
+            if (searchResult.innerHTML === "") {
+                searchResult.innerText = "No Car Available !!!";
+            }
+            prevCarBrand = searchCarBrand;
+            prevPickupLocation = pickupLocation;
+        }
+
+        function gotoDetails(id) {
+            window.location.href = "{% url 'App_main:car-book' pk=12345 %}".replace(/12345/, id.toString());
+        }
+    </script>
+{% endblock %}

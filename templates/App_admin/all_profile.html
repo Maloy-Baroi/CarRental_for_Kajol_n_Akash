@@ -1,0 +1,236 @@
+{% extends 'App_admin/basement.html' %}
+{% block admin_base_main %}
+    <style>
+        .container_content {
+            margin: 10px 50px;
+        }
+
+        @media screen and (max-width: 720px) {
+            .container_content {
+                margin: 10px 20px;
+            }
+        }
+
+        .form-div {
+            padding: 10px;
+            background: var(--body-bg);
+            border-top: none;
+            border-bottom: none;
+            line-height: 24px;
+            color: var(--body-quiet-color);
+            width: 100%;
+        }
+
+        .form-div form select {
+            vertical-align: top;
+            height: 24px;
+            color: var(--body-fg);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 14px;
+            padding: 0 0 0 4px;
+            margin: 0 0 0 10px;
+        }
+
+        /* Table Css */
+        table {
+            border: 1px solid #ccc;
+            border-collapse: collapse;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            table-layout: fixed;
+        }
+
+        table tr {
+            background-color: #f8f8f8;
+            border: 1px solid #ddd;
+            padding: .35em;
+        }
+
+        table th,
+        table td {
+            padding: .625em;
+            text-align: left;
+        }
+
+        table th {
+            font-size: .85em;
+            letter-spacing: .1em;
+            text-transform: uppercase;
+            text-align: left;
+        }
+
+        @media screen and (max-width: 600px) {
+            table {
+                border: 0;
+            }
+
+            table caption {
+                font-size: 1.3em;
+            }
+
+            table thead {
+                border: none;
+                clip: rect(0 0 0 0);
+                height: 1px;
+                margin: -1px;
+                overflow: hidden;
+                padding: 0;
+                position: absolute;
+                width: 1px;
+            }
+
+            table tr {
+                border-bottom: 3px solid #ddd;
+                display: block;
+                margin-bottom: .625em;
+            }
+
+            table td {
+                border-bottom: 1px solid #ddd;
+                display: block;
+                font-size: .8em;
+                text-align: right;
+            }
+
+            table td::before {
+                /*
+                * aria-label has no advantage, it won't be read inside a table
+                content: attr(aria-label);
+                */
+                content: attr(data-label);
+                float: left;
+                font-weight: bold;
+                text-transform: uppercase;
+            }
+
+            table td:last-child {
+                border-bottom: 0;
+            }
+        }
+    </style>
+    <div class="main__inner container_content">
+        <div class="content">
+            <p>
+                <span style="font-size: 20px">
+                    Select custom user to change
+                </span>
+                <span>
+                    <button class="btn-shadow btn btn-info" style="float: right" onclick="createUserFormOpener()">
+                        ADD PROFILE
+                    </button>
+                </span>
+            </p>
+        </div>
+        <div class="form-div">
+        </div>
+        <table id="id-user-table">
+            <thead>
+            <tr>
+                <th scope="col" style="color: #666666;">Profiles</th>
+                <th scope="col" style="color: #666666;">Username</th>
+                <th scope="col" style="color: #666666;">Mobile</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for profile in profiles %}
+                <tr>
+                    <td data-label="Profile">{{ profile.full_name }}</td>
+                    <td data-label="Username">{{ profile.username }}</td>
+                    <td data-label="Mobile">{{ profile.phone_number }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="container">
+        <div class="add-user-form" style="display: none;" id="id-createuser-form">
+            <div class="row">
+                <div class="col-md-3"></div>
+                <div class="col-md-6" style="border: 1px solid #000000; border-radius: 7px;">
+                    <form action="{% url 'App_admin:create-userProfile-by-admin' %}" enctype="multipart/form-data"
+                          method="post" class="form-group">
+                        {% csrf_token %}
+                        <legend style="text-align: center; font-size: 20px;">Add Profile</legend>
+                        <fieldset class="form-group">
+                            <div class="form-group">
+                                <label for="user">User</label>
+                                <select type="text" name="user" id="id-user" class="form-control" required>
+                                    <option value="----------">----------</option>
+                                    {% for user in users %}
+                                        <option value="{{ user }}">{{ user }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="id_username">Username</label>
+                                <input type="text" name="username" id="id_username" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="id_Full_Name">Full_Name</label>
+                                <input type="text" name="Full_Name" id="id_Full_Name" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="id_Mobile">Mobile</label>
+                                <input type="text" name="Mobile" id="id_Mobile" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="id_House">House</label>
+                                <input type="text" name="House" id="id_House" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="id_City">City</label>
+                                <input type="text" name="City" id="id_City" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="id_ZipCode">ZipCode</label>
+                                <input type="number" name="ZipCode" id="id_ZipCode" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="id_Profile_Picture">Profile_Picture</label>
+                                <input type="file" name="Profile_Picture" id="id_Profile_Picture" class="form-control"
+                                       required>
+                            </div>
+                        </fieldset>
+                        <div class="form-group">
+                            <button class="btn btn-success" type="submit">
+                                Add
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-md-3"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let closer = 0;
+        let createUserForm = document.getElementById('id-createuser-form');
+
+        function createUserFormOpener() {
+            if (closer === 0) {
+                createUserForm.style.display = 'block';
+                closer = 1;
+            } else {
+                createUserForm.style.display = 'none';
+                closer = 0;
+            }
+        }
+    </script>
+{% endblock %}
+
+{% block active_script %}
+    dashboard.classList.add('mm-active')
+    Users.classList.remove('mm-active')
+    UserProfiles.classList.remove('mm-active')
+    ContactUs.classList.remove('mm-active')
+    Areas.classList.remove('mm-active')
+    BookingMoney.classList.remove('mm-active')
+    CarBookings.classList.remove('mm-active')
+    CarBrands.classList.remove('mm-active')
+    CarDrivers.classList.remove('mm-active')
+    Vehicles.classList.remove('mm-active')
+    groups.classList.remove('mm-active')
+{% endblock %}

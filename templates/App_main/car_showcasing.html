@@ -1,0 +1,45 @@
+{% extends 'App_main/base.html' %}
+{% load static %}
+{% block main %}
+    <div class="site-section bg-light pt-5">
+        <div class="container">
+            <div class="row">
+                {% for car in cars %}
+                    <div class="col-md-6 col-lg-4 mb-4">
+                        <div class="listing d-block  align-items-stretch">
+                            <div class="listing-img h-100 mr-4">
+                                <img src="{{ car.car_image.url }}" alt="Image" class="img-fluid"
+                                     style="width: 100%; height: 252px">
+                            </div>
+                            <div class="listing-contents h-100">
+                                <h3>{{ car.car_name }}</h3>
+                                <div class="rent-price">
+                                    <strong>৳ {{ car.cost_per_day }}</strong><span class="mx-1">/</span>day
+                                </div>
+                                <div class="d-block d-md-flex mb-3 border-bottom pb-3">
+                                    <div class="listing-feature pr-4">
+                                        <span class="caption">Doors:</span><br>
+                                        <span class="number">{{ car.doors }}</span>
+                                    </div>
+                                    <div class="listing-feature pr-4">
+                                        <span class="caption">Passenger:</span><br>
+                                        <span class="number">{{ car.capacity }}</span>
+                                    </div>
+                                </div>
+                                <div>
+                                    <p>{{ car.description|truncatechars:100 }}</p>
+                                    <p>
+                                        <a href="{% url 'App_main:car-book' pk=car.id %}"
+                                           class="btn btn-primary btn-sm">
+                                            Rent Now
+                                        </a>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

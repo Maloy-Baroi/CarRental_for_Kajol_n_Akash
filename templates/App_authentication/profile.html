@@ -1,0 +1,368 @@
+{% extends 'App_main/base.html' %}
+{% load static %}
+{% block main %}
+    {% load crispy_forms_filters %}
+
+    <style>
+        img {
+            display: block;
+        }
+
+        .container {
+            max-width: 93.5rem;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .btn {
+            display: inline-block;
+            font: inherit;
+            background: none;
+            border: none;
+            color: inherit;
+            padding: 0;
+            cursor: pointer;
+        }
+
+        .btn:focus {
+            outline: 0.5rem auto #4d90fe;
+        }
+
+        /* Profile Section */
+
+        .profile {
+            padding: 5rem 0;
+        }
+
+        @media screen and (max-width: 720px) {
+            .profile-container {
+                margin: 0 10px !important;
+            }
+
+            .profile {
+                padding: 2rem 0;
+                margin: 0 10px;
+            }
+        }
+
+        .profile::after {
+            content: "";
+            display: block;
+            clear: both;
+        }
+
+        .profile-image {
+            float: left;
+            width: calc(33.333% - 1rem);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 3rem;
+        }
+
+        .profile-user-settings,
+        .profile-bio {
+            float: left;
+            width: calc(66.666% - 2rem);
+        }
+
+        .profile-user-settings {
+            margin-top: 1.1rem;
+        }
+
+        .profile-user-name {
+            display: inline-block;
+            font-size: 3.2rem;
+            font-weight: 300;
+        }
+
+        @media screen and (max-width: 720px) {
+            .profile-user-name {
+                display: inline-block;
+                font-size: 1rem;
+                font-weight: 300;
+            }
+        }
+
+        .profile-edit-btn {
+            font-size: 1.4rem;
+            line-height: 1.8;
+            border: 0.1rem solid #dbdbdb;
+            border-radius: 0.3rem;
+            padding: 0 2.4rem;
+            margin-left: 2rem;
+        }
+
+        .profile-settings-btn {
+            font-size: 2rem;
+            margin-left: 1rem;
+        }
+
+        .profile-stats {
+            margin-top: 2.3rem;
+        }
+
+        .profile-stats li {
+            display: inline-block;
+            font-size: 1.6rem;
+            line-height: 1.5;
+            margin-right: 4rem;
+            cursor: pointer;
+        }
+
+        .profile-stats li:last-of-type {
+            margin-right: 0;
+        }
+
+        .profile-bio {
+            font-size: 1.6rem !important;
+            font-weight: 400 !important;
+            line-height: 1.5 !important;
+            margin-top: 2.3rem !important;
+        }
+
+        .profile-real-name,
+        .profile-edit-btn {
+            font-weight: 600;
+        }
+
+        /*---- Table CSS ----*/
+        table {
+            border: 1px solid #ccc;
+            border-collapse: collapse;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            table-layout: fixed;
+        }
+
+        table caption {
+            font-size: 1.5em;
+            margin: .5em 0 .75em;
+        }
+
+        table tr {
+            background-color: #f8f8f8;
+            border: 1px solid #ddd;
+            padding: .35em;
+        }
+
+        table th,
+        table td {
+            padding: .625em;
+            text-align: center;
+        }
+
+        table th {
+            font-size: .85em;
+            letter-spacing: .1em;
+            text-transform: uppercase;
+        }
+
+        @media screen and (max-width: 600px) {
+            table {
+                border: 0;
+            }
+
+            table caption {
+                font-size: 1.3em;
+            }
+
+            table thead {
+                border: none;
+                clip: rect(0 0 0 0);
+                height: 1px;
+                margin: -1px;
+                overflow: hidden;
+                padding: 0;
+                position: absolute;
+                width: 1px;
+            }
+
+            table tr {
+                border-bottom: 3px solid #ddd;
+                display: block;
+                margin-bottom: .625em;
+            }
+
+            table td {
+                border-bottom: 1px solid #ddd;
+                display: block;
+                font-size: .8em;
+                text-align: right;
+            }
+
+            table td::before {
+                /*
+                * aria-label has no advantage, it won't be read inside a table
+                content: attr(aria-label);
+                */
+                content: attr(data-label);
+                float: left;
+                font-weight: bold;
+                text-transform: uppercase;
+            }
+
+            table td:last-child {
+                border-bottom: 0;
+            }
+        }
+    </style>
+
+    <header>
+
+        <div class="container profile-container">
+
+            <div class="profile">
+
+                <div class="profile-image">
+
+                    {% if userProfile.profile_picture %}
+                        <img src="{{ userProfile.profile_picture.url }}" style="height: 152px; width: 152px;"
+                             alt="">
+                    {% else %}
+                        <img src="{% static 'images/defaultImage.png' %}" style="height: 152px; width: 152px;"
+                             alt="">
+                    {% endif %}
+                </div>
+                <div class="profile-user-settings">
+                    {% if userProfile.is_fully_filled %}
+                        <h1 class="profile-user-name">{{ userProfile.full_name }}</h1>
+                    {% else %}
+                        <h1 class="profile-user-name">User ({{ user }})</h1>
+                    {% endif %}
+                    <button class="btn profile-edit-btn"
+                            onclick="formShowcase()">
+                        Edit Profile
+                    </button>
+                    <button class="btn profile-settings-btn" aria-label="profile settings" data-bs-toggle="modal"
+                            data-bs-target="#bookingShowcasingModal">
+                        <i class="fas fa-cog" aria-hidden="true"> My Bookings </i>
+                    </button>
+                </div>
+                <div class="profile-bio">
+                    {% if userProfile.is_fully_filled %}
+                        <p>
+                            <span class="profile-real-name">{{ userProfile.username }}</span>
+                            Lives in {{ userProfile.House }}, {{ userProfile.city }}-{{ userProfile.zipcode }}
+                        </p>
+                    {% endif %}
+                </div>
+
+            </div>
+            <!-- End of profile section -->
+
+        </div>
+        <!-- End of container -->
+
+    </header>
+
+    <div class="container" style="display: none" id="id-form-div">
+        <div class="row">
+            <div class="col-md-3"></div>
+            <div class="col-md-6">
+                <form method="post" enctype="multipart/form-data" class="form-group">
+                    {% csrf_token %}
+                    <legend>Change Profile</legend>
+                    <fieldset class="form-group">
+                        {{ form|crispy }}
+                    </fieldset>
+                    <div class="form-group mt-2">
+                        <button class="btn btn-primary">
+                            Change
+                        </button>
+                    </div>
+                </form>
+            </div>
+            <div class="col-md-3"></div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="bookingShowcasingModal" tabindex="-1"
+         aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <table>
+                        <caption>Statement Summary</caption>
+                        <thead>
+                        <tr>
+                            <th scope="col">Car Name</th>
+                            <th scope="col">Car Number</th>
+                            <th scope="col">Doors</th>
+                            <th scope="col">Capacity</th>
+                            <th scope="col">Pickup Date</th>
+                            <th scope="col">Return Date</th>
+                            <th scope="col">Total Cost</th>
+                            <th scope="col">Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for booking in bookings %}
+                            <tr>
+                                <td data-label="Car Name">{{ booking.car.car_name }}</td>
+                                <td data-label="Car Number">{{ booking.car.car_number }}</td>
+                                <td data-label="Doors">{{ booking.car.doors }}</td>
+                                <td data-label="Capacity">{{ booking.car.capacity }}</td>
+                                <td data-label="Pickup Date">{{ booking.pickup_date }}</td>
+                                <td data-label="Return Date">{{ booking.return_date }}</td>
+                                <td data-label="Total Cost">{{ booking.total_cost }}</td>
+                                <td data-label="Action">
+                                    <button class="btn btn-danger"
+                                            onclick="booking_cancel_action({{ booking.id }})">
+                                        Cancel Booking
+                                    </button>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let editProfileCounter = 0;
+        let formDiv = document.getElementById('id-form-div');
+        let phone_number_div = document.getElementById('div_id_phone_number');
+        let input_phone_number_length = (phone_number_div.querySelector('input').value).length;
+
+        if (input_phone_number_length === 0) {
+            phone_number_div.style.display = 'block';
+        } else {
+            phone_number_div.style.display = 'none';
+        }
+
+        formDiv.style.transition = '2s';
+
+        function formShowcase() {
+            if (editProfileCounter === 0) {
+                formDiv.style.display = 'block';
+                editProfileCounter = 1;
+            } else {
+                formDiv.style.display = 'none';
+                editProfileCounter = 0;
+            }
+            console.log(editProfileCounter);
+        }
+
+        function beep_sound() {
+        }
+
+        function booking_cancel_action(booking_ID) {
+            let beepSound = new Audio("{% static 'sound/beep.mp3' %}");
+            beepSound.play();
+            setTimeout(function () {
+                if (confirm("Are you sure you want to cancel the booking, therefore You won't get back the booking money.")) {
+                    window.location.href = "{% url 'App_main:booking-cancel' bookingID=12345 %}".replace(/12345/, booking_ID.toString());
+                }
+            }, 500);
+        }
+    </script>
+{% endblock %}
